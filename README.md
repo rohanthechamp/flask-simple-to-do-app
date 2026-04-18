@@ -35,3 +35,8 @@ venv\Scripts\activate   # Windows
 
 pip install -r requirements.txt
 python App.py
+```
+
+## 📄 License
+
+Open-source and available under the MIT License.
