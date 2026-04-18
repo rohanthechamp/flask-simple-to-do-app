@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Top 10 Tasks</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            padding-top: 30px;
+        }
+        .task-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .task-header h1 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .card {
+            transition: all 0.3s ease;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+        }
+        .card-body {
+            position: relative;
+        }
+        .task-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .empty-state {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+        }
+        .empty-state img {
+            max-width: 250px;
+            margin-bottom: 20px;
+        }
+        .priority-stars {
+            display: flex;
+            align-items: center;
+        }
+        .priority-stars .text-warning {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="task-header text-center">
+            <h1>Your Top Priority Tasks</h1>
+            <p class="text-white-50">
+                Keep track of your progress and stay organized!
+            </p>
+        </div>
+
+        {% if not my_task %}
+        <div class="empty-state">
+            <img src="/api/placeholder/250/250" alt="No Tasks" class="img-fluid">
+            <h4 class="mb-3">No Tasks Found!</h4>
+            <p class="text-muted mb-4">You currently have no tasks. Click the button below to add your first task.</p>
+            <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Add First Task
+            </a>
+        </div>
+        {% endif %}
+
+        {% for task in my_task %}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="task-status">
+                    <span class="badge {% if task.completed %}bg-success{% else %}bg-warning{% endif %}">
+                        {% if task.completed %}Completed{% else %}Pending{% endif %}
+                    </span>
+                </div>
+                <h5 class="card-title text-primary">{{ task.task }}</h5>
+                <div class="priority-stars mb-3">
+                    <label class="text-warning me-2 mb-0">Priority:</label>
+                    {% for i in range(task.priority) %}
+                    <i class="fas fa-star text-warning"></i>
+                    {% endfor %}
+                </div>
+                <p class="text-muted small mb-3">
+                    <i class="far fa-calendar-alt me-2"></i>{{ task.date_added }}
+                </p>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('update', id=task.id) }}" class="btn btn-success btn-sm">
+                        <i class="fas fa-edit me-2"></i>Update
+                    </a>
+                    <a href="{{ url_for('delete', id=task.id) }}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt me-2"></i>Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Add Task
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional, but recommended for certain Bootstrap features) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<!-- ```
+
+I've enhanced the template with several improvements:
+
+1. **Modern Design**:
+   - Added a gradient background for the header
+   - Implemented hover effects on task cards
+   - Used a clean, contemporary color scheme
+   - Added subtle shadows and transitions
+
+2. **Empty State**:
+   - Created a more engaging empty state with a placeholder image
+   - Improved typography and layout
+   - Added an icon to the "Add Task" button
+
+3. **Task Cards**:
+   - Moved status badge to the top-right corner
+   - Enhanced priority display with star icons
+   - Added icons to update and delete buttons
+   - Improved overall card layout and spacing
+
+4. **Technical Improvements**:
+   - Included Bootstrap 5.3 for responsive design
+   - Added Font Awesome for icons
+   - Implemented custom CSS for a polished look
+   - Ensured mobile responsiveness
+
+5. **Additional Features**:
+   - Placeholder image for the empty state
+   - Conditional styling for completed/pending tasks
+   - Consistent typography and color scheme
+
+Notes:
+- The `/api/placeholder/250/250` is a placeholder image. In a real application, you'd replace this with an actual image.
+- I've used Bootstrap classes and custom CSS to create a responsive, modern design.
+- The template uses Jinja2 templating syntax, which is common in Flask applications.
+
+Would you like me to make any specific adjustments to the design or layout? -->
